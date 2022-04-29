@@ -3,11 +3,11 @@
     <h2 align="center">Project Title</h2>
     <p align="center">Project Description</p>
     <b>
-        <a href="https://github.com/K4ryuu/Project_Template/releases">Download</a>
+        <a href="https://github.com/K4ryuu/Chat-Processor/releases">Download</a>
         ·
-        <a href="https://github.com/K4ryuu/Project_Template/issues">Report Bug</a>
+        <a href="https://github.com/K4ryuu/Chat-Processor/issues">Report Bug</a>
         ·
-        <a href="https://github.com/K4ryuu/Project_Template/issues">Request Feature</a>
+        <a href="https://github.com/K4ryuu/Chat-Processor/issues">Request Feature</a>
     </b>
     <br/>
     Love the project? Please consider donating to help it improve!
