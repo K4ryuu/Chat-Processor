@@ -1,7 +1,7 @@
 <font face = "Trebuchet MS">
 <div align="center">
-    <h2 align="center">Project Title</h2>
-    <p align="center">Project Description</p>
+    <h2 align="center">Kitsune Chat-Processor</h2>
+    <p align="center">This is a replacement for MultiColors include (by @Bara). The code is an improved and edited version of @C0rp3n's colorlib.</p>
     <b>
         <a href="https://github.com/K4ryuu/Chat-Processor/releases">Download</a>
         ·
