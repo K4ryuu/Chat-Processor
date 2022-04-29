@@ -127,10 +127,7 @@ stock void CPrintToChatTeam(int team, const char[] message, any ...)
 {
     for (int i = 1; i <= MaxClients; ++i)
     {
-        if (IsClientInGame(i) &&
-            !IsFakeClient(i) &&
-            !_CL_skip_list[i] &&
-            GetClientTeam(i) == team)
+        if (IsClientInGame(i) && !IsFakeClient(i) && !_CL_skip_list[i] && GetClientTeam(i) == team)
         {
             SetGlobalTransTarget(i);
 
@@ -158,10 +155,7 @@ stock void CPrintToChatTeamEx(int team, int author, const char[] message, any ..
 {
     for (int i = 1; i <= MaxClients; ++i)
     {
-        if (IsClientInGame(i) &&
-            !IsFakeClient(i) &&
-            !_CL_skip_list[i] &&
-            GetClientTeam(i) == team)
+        if (IsClientInGame(i) && !IsFakeClient(i) && !_CL_skip_list[i] && GetClientTeam(i) == team)
         {
             SetGlobalTransTarget(i);
 
@@ -530,38 +524,41 @@ stock void CEscapeTags(char[] message, int maxlength)
 	int index = 0;
 	for (; index < maxlength; ++i)
 	{
-		if (_CL_buffer[i] == 0x00)
-			break;
+        switch (_CL_buffer[i])
+        {
+            case 0x00:
+                break;
 
-		if (_CL_buffer[i] == '{')
-		{
-			message[index] = '\\';
-			++index;
-			message[index] = '{';
-			++index;
-		}
-		else if (_CL_buffer[i] == '\\')
-		{
-			++i;
-			if (_CL_buffer[i] == '{')
-			{
-				message[index] = '\\';
-				++index;
-				message[index] = '{';
-			}
-			else
-			{
-				message[index] = '\\';
-				--i;
-			}
+            case '{':
+            {
+                message[index] = '\\';
+			    ++index;
+			    message[index] = '{';
+			    ++index;
+            }
+            case '\\':
+            {
+                ++i;
+                if (_CL_buffer[i] == '{')
+                {
+                    message[index] = '\\';
+                    ++index;
+                    message[index] = '{';
+                }
+                else
+                {
+                    message[index] = '\\';
+                    --i;
+                }
 
-			++index;
-		}
-		else
-		{
-			message[index] = _CL_buffer[i];
-			++index;
-		}
+                ++index;
+            }
+            default:
+            {
+                message[index] = _CL_buffer[i];
+			    ++index;
+            }
+        }
 	}
 
 	message[index] = 0x00;
@@ -581,47 +578,48 @@ stock void CFormat(char[] message, int maxlength)
 	int index = 0;
 	for (int i = 0; i < maxlength; ++i)
 	{
-		if (message[i] == 0x00)
-			break;
+        switch (message[i])
+        {
+            case 0x00:
+                break;
 
-		if (message[i] == '{')
-		{
-			++i;
-			int length = 0;
-			char cc = view_as<char>(_CL_ColorMap(message[i], length));
-			if (cc)
-			{
-				message[index] = cc;
-				i += length;
-			}
-			else
-				message[index] = '{';
+            case '{':
+            {
+                ++i;
+                int length = 0;
+                char cc = view_as<char>(_CL_ColorMap(message[i], length));
+                if (cc)
+                {
+                    message[index] = cc;
+                    i += length;
+                }
+                else
+                    message[index] = '{';
 
-			/* we need to unpeek the increment for skipping over all of the
-				* color tag + so we dont skip a char for a bad tag */
-			--i;
-			++index;
-		}
-		else if (message[i] == '\\')
-		{
-			++i;
-			if (message[i] == '{')
-			{
-				message[index] = '{';
-			}
-			else
-			{
-				message[index] = '\\';
-				--i;
-			}
+                --i;
+                ++index;
+            }
+            case '\\':
+            {
+                ++i;
+                if (message[i] == '{')
+                {
+                    message[index] = '{';
+                }
+                else
+                {
+                    message[index] = '\\';
+                    --i;
+                }
 
-			++index;
-		}
-		else
-		{
-			message[index] = message[i];
-			++index;
-		}
+                ++index;
+            }
+            default:
+            {
+                message[index] = message[i];
+		    	++index;
+            }
+        }
 	}
 
 	message[index] = 0x00;
@@ -639,7 +637,7 @@ stock void CFormat(char[] message, int maxlength)
  */
 stock void CSkipNextClient(int client)
 {
-    if (!Karyuu_IsClientIndex(client))
+    if (!(0 < iIndex <= MaxClients))
         ThrowError("Invalid client index %d", client);
 
     _CL_skip_list[client] = true;
@@ -666,8 +664,6 @@ stock int CPreFormat(char[] message)
 
     return index;
 }
-
-
 
 /**
  * Sends a SayText2 usermessage to a client
